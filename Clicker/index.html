@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker Clicker V10 - UX Master</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="matrix-canvas"></canvas>
+    
+    <div class="debug-controls">
+        <button id="debug-boost" class="debug-trigger">DEV: +999T DATA</button>
+        <button id="debug-breach" class="debug-trigger">DEV: SPAWN BREACH</button>
+        <button id="debug-reset" class="debug-trigger dev-reset">DEV: RESET TOTAL</button>
+    </div>
+
+    <button id="open-sidebar" class="menu-trigger">☰ STATUS</button>
+    
+    <div id="side-menu" class="sidebar">
+        <div class="sidebar-header">
+            <h3>SISTEMA</h3>
+            <button id="close-sidebar">X</button>
+        </div>
+        <div class="sidebar-content">
+            <button id="reset-game" class="reset-btn">LIMPAR CACHE</button>
+        </div>
+    </div>
+
+    <div id="breach-overlay" class="breach-flash hidden"></div>
+
+    <div class="game-container">
+        <div class="scanline"></div>
+        <header>
+            <div id="system-log" class="log-window"></div>
+            
+            <div class="progress-container">
+                <div id="data-progress-bar" class="progress-fill"></div>
+            </div>
+
+            <h1>Data: <span id="counter">0</span></h1>
+            <div class="stats-row">
+                <p>PPS: <span id="pps">0</span></p>
+                <p>CLICK: <span id="click-power-display">1</span></p>
+            </div>
+        </header>
+
+        <div class="buy-selector">
+            <button class="batch-btn active" data-amount="1">1x</button>
+            <button class="batch-btn" data-amount="10">10x</button>
+            <button class="batch-btn" data-amount="100">100x</button>
+            <button class="batch-btn active-buy" data-amount="max">MAX</button>
+        </div>
+
+        <main>
+            <div id="idle-status" class="idle-banner neon-pulsing">MODO MANUAL</div>
+            <div class="core-wrapper">
+                <canvas id="orb-canvas"></canvas>
+                <button id="click-me"></button>
+                <div class="core-ring"></div>
+            </div>
+        </main>
+
+        <section class="shop">
+            <div id="upgrade-list"></div>
+        </section>
+    </div>
+
+    <script src="matrix.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

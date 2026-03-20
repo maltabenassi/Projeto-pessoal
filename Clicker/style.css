@@ -1,0 +1,398 @@
+/* style.css */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    outline: none; 
+    -webkit-tap-highlight-color: transparent; 
+}
+
+body { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    min-height: 100vh; 
+    background-color: #000; 
+    color: #00ff00; 
+    font-family: 'Courier New', monospace; 
+    overflow: hidden; 
+    transition: color 0.5s, background 0.5s; 
+}
+
+#matrix-canvas { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100vw !important; 
+    height: 100vh !important; 
+    z-index: -1; 
+    pointer-events: none; 
+    transition: filter 0.5s; 
+}
+
+.debug-controls { 
+    position: fixed; 
+    top: 15px; 
+    right: 15px; 
+    z-index: 1000; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 8px; 
+}
+
+.debug-trigger { 
+    background: rgba(40, 0, 0, 0.6); 
+    color: #ff0044; 
+    border: 1px solid #ff0044; 
+    padding: 6px 12px; 
+    cursor: pointer; 
+    border-radius: 4px; 
+    font-size: 0.7rem; 
+    font-weight: bold; 
+    transition: 0.3s; 
+}
+
+.game-container { 
+    position: relative; 
+    z-index: 10; 
+    width: 95%; 
+    max-width: 420px; 
+    height: 92vh; 
+    background: rgba(0, 15, 0, 0.85); 
+    backdrop-filter: blur(15px); 
+    border: 1px solid rgba(0, 255, 0, 0.2); 
+    border-radius: 12px; 
+    padding: 15px; 
+    display: flex; 
+    flex-direction: column; 
+    overflow: hidden; 
+    transition: border 0.5s; 
+}
+
+.progress-container { 
+    width: 100%; 
+    height: 4px; 
+    background: rgba(0, 255, 0, 0.1); 
+    margin-bottom: 10px; 
+    border-radius: 2px; 
+    overflow: hidden; 
+}
+
+.progress-fill { 
+    width: 0%; 
+    height: 100%; 
+    background: #00ff00; 
+    box-shadow: 0 0 10px #00ff00; 
+    transition: width 0.3s ease, background 0.5s; 
+}
+
+.scanline { 
+    width: 100%; 
+    height: 100%; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 255, 0, 0.02) 50%); 
+    background-size: 100% 4px; 
+    z-index: 11; 
+    pointer-events: none; 
+}
+
+.floating-num { 
+    position: fixed; 
+    pointer-events: none; 
+    font-weight: bold; 
+    font-size: 1.8rem; 
+    z-index: 9999; 
+    text-shadow: 0 0 10px currentColor; 
+    animation: floatUp 0.6s forwards ease-out; 
+}
+
+@keyframes floatUp { 
+    0% { opacity: 1; transform: translateY(0) scale(1.5); } 
+    100% { opacity: 0; transform: translateY(-130px) scale(0.8); } 
+}
+
+.log-window { 
+    height: 45px; 
+    overflow: hidden; 
+    background: rgba(0,0,0,0.5); 
+    border: 1px solid #00ff0011; 
+    font-size: 0.6rem; 
+    padding: 5px; 
+    margin-bottom: 5px; 
+    color: #00d4ff; 
+    transition: border 0.5s, color 0.5s; 
+}
+
+h1 { 
+    font-size: 1.6rem; 
+    text-shadow: 0 0 15px #00ff00; 
+    text-align: center; 
+    margin: 5px 0; 
+    transition: text-shadow 0.5s; 
+}
+
+.stats-row { 
+    display: flex; 
+    justify-content: space-around; 
+    margin-bottom: 15px; 
+    font-size: 0.85rem; 
+    color: #00d4ff; 
+    transition: color 0.5s; 
+}
+
+.core-wrapper { 
+    position: relative; 
+    width: 160px; 
+    height: 160px; 
+    margin: 15px auto; 
+    z-index: 100; 
+    border-radius: 50%; 
+}
+
+#orb-canvas { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    z-index: 105; 
+    border-radius: 50%; 
+    pointer-events: none; 
+}
+
+#click-me { 
+    --flash-color: #00ff00; 
+    width: 100%; 
+    height: 100%; 
+    border-radius: 50%; 
+    border: 3px solid var(--flash-color); 
+    background: transparent; 
+    cursor: pointer; 
+    position: relative; 
+    z-index: 110; 
+    box-shadow: 0 0 15px var(--flash-color), inset 0 0 15px var(--flash-color); 
+    /* NOVO: Ajuste de transição para resposta imediata no clique */
+    transition: transform 0.05s ease-out, box-shadow 0.1s, border 0.5s; 
+}
+
+/* NOVO: Animação de afundar trazida de volta com escala agressiva */
+#click-me:active, #click-me.is-pulsing { 
+    transform: scale(0.88) !important; 
+    box-shadow: 0 0 40px var(--flash-color), inset 0 0 20px var(--flash-color); 
+}
+
+.core-ring { 
+    position: absolute; 
+    top: -18px; 
+    left: -18px; 
+    right: -18px; 
+    bottom: -18px; 
+    border: 1px solid rgba(0, 212, 255, 0.1); 
+    border-radius: 50%; 
+    animation: rotate 40s linear infinite; 
+    z-index: 90; 
+}
+
+@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.shop { 
+    flex-grow: 1; 
+    overflow-y: auto; 
+    border-top: 1px solid rgba(0, 255, 0, 0.1); 
+    padding-top: 10px; 
+    position: relative; 
+    z-index: 150; 
+}
+
+.shop::-webkit-scrollbar { width: 4px; }
+.shop::-webkit-scrollbar-thumb { background: rgba(0, 255, 0, 0.2); border-radius: 10px; }
+
+.hidden-upgrade { display: none !important; }
+
+.upgrade-item { margin-bottom: 8px; }
+
+.upgrade-btn { 
+    width: 100%; 
+    background: rgba(0, 15, 0, 0.4); 
+    border: 1px solid rgba(0, 255, 0, 0.15); 
+    padding: 12px; 
+    text-align: left; 
+    cursor: pointer; 
+    border-radius: 6px; 
+    display: flex; 
+    flex-direction: column; 
+    transition: border 0.4s, box-shadow 0.4s; 
+}
+
+.upgrade-btn:disabled { opacity: 0.15; cursor: not-allowed; }
+.btn-title { display: block; font-weight: bold; font-size: 0.85rem; color: #00ff00 !important; } 
+.btn-info { font-size: 0.7rem; color: #00d4ff !important; } 
+.cyan-preview { color: #00d4ff !important; opacity: 0.8; }
+
+.buy-selector { display: flex; gap: 5px; margin-bottom: 12px; position: relative; z-index: 150; }
+
+.batch-btn { 
+    background: rgba(0,0,0,0.6); 
+    border: 1px solid #00ff0033; 
+    color: #00ff00; 
+    padding: 8px; 
+    cursor: pointer; 
+    flex: 1; 
+    font-size: 0.7rem; 
+    border-radius: 4px; 
+}
+
+.batch-btn.active { 
+    background: #00ff00 !important; 
+    color: #000 !important; 
+    font-weight: bold; 
+    box-shadow: 0 0 10px #00ff00; 
+}
+
+.sidebar { 
+    position: fixed; 
+    left: -300px; 
+    width: 280px; 
+    height: 100%; 
+    background: #000; 
+    z-index: 2000; 
+    transition: 0.4s; 
+    border-right: 1px solid #00ff00; 
+    padding: 25px; 
+}
+
+.sidebar.active { left: 0; }
+
+.menu-trigger { 
+    position: fixed; 
+    top: 15px; 
+    left: 15px; 
+    z-index: 1000; 
+    background: #000; 
+    color: #00ff00; 
+    border: 1px solid #00ff00; 
+    padding: 6px 12px; 
+    border-radius: 4px; 
+    font-size: 0.7rem; 
+    cursor: pointer; 
+}
+
+.idle-banner { 
+    font-size: 0.6rem; 
+    text-align: center; 
+    margin-bottom: 5px; 
+    letter-spacing: 2px; 
+    color: var(--flash-color); 
+    transition: color 0.5s; 
+}
+
+.neon-pulsing { 
+    font-weight: bold; 
+    animation: breathingText 2s infinite ease-in-out; 
+}
+
+@keyframes breathingText { 
+    0% { opacity: 0.2; text-shadow: none; } 
+    50% { opacity: 1; text-shadow: 0 0 5px var(--flash-color), 0 0 15px var(--flash-color); } 
+    100% { opacity: 0.2; text-shadow: none; } 
+}
+
+.reset-btn { 
+    color: #ff0044; 
+    border: 1px solid #ff0044; 
+    background: none; 
+    width: 100%; 
+    padding: 12px; 
+    cursor: pointer; 
+    margin-top: 30px; 
+    font-weight: bold; 
+}
+
+/* GATILHO e MODO SYSTEM BREACH */
+.breach-trigger-icon { 
+    position: fixed; 
+    font-size: 2rem; 
+    cursor: pointer; 
+    z-index: 9000; 
+    user-select: none; 
+    animation: glitchTrigger 0.3s infinite, floatBreach 7s forwards linear; 
+    text-shadow: 0 0 10px #ff0044; 
+}
+
+@keyframes glitchTrigger { 
+    0% { transform: scale(1) skew(0deg); color: #ff0044; } 
+    30% { transform: scale(1.1) skew(5deg); color: #fff; } 
+    100% { transform: scale(1) skew(0deg); color: #ff0044; } 
+}
+
+@keyframes floatBreach { 
+    from { opacity: 1; } 
+    to { opacity: 0; transform: translateY(-50px); } 
+}
+
+.breach-flash { 
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+    background: rgba(255, 0, 68, 0.4); 
+    z-index: 10000; 
+    pointer-events: none; 
+    animation: screenPulse 0.5s infinite; 
+}
+
+@keyframes screenPulse { 
+    0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } 
+}
+
+.body-breach-active { color: #ff0044 !important; }
+
+.body-breach-active #matrix-canvas { 
+    filter: sepia(1) hue-rotate(320deg) saturate(3); 
+}
+
+.body-breach-active .game-container, 
+.body-breach-active .log-window, 
+.body-breach-active .upgrade-btn { 
+    border-color: rgba(255, 0, 68, 0.3) !important; 
+}
+
+.body-breach-active h1 { text-shadow: 0 0 15px #ff0044 !important; }
+
+.body-breach-active .log-window, 
+.body-breach-active .stats-row, 
+.body-breach-active .btn-info { color: #fff !important; }
+
+.body-breach-active #click-me { 
+    border-color: #ff0044 !important; 
+    box-shadow: 0 0 15px #ff0044, inset 0 0 15px #ff0044 !important; 
+}
+
+.body-breach-active .progress-fill, 
+.body-breach-active .batch-btn.active { 
+    background: #ff0044 !important; 
+    box-shadow: 0 0 10px #ff0044 !important; 
+}
+
+.body-breach-active #idle-status, 
+.body-breach-active .floating-num { color: #fff !important; }
+
+.body-breach-active .shop::-webkit-scrollbar-thumb { background: rgba(255, 0, 68, 0.3); }
+
+.hidden { display: none !important; }
+
+/* Estilização de Tiers (Bordas e Sombras apenas) */
+.upgrade-item.tier-1 .upgrade-btn { border-color: #00d4ff !important; box-shadow: inset 0 0 10px #00d4ff33; }
+.upgrade-item.tier-2 .upgrade-btn { border-color: #ff00ff !important; box-shadow: inset 0 0 10px #ff00ff33; }
+.upgrade-item.tier-3 .upgrade-btn { border-color: #ffaa00 !important; box-shadow: inset 0 0 10px #ffaa0033; }
+.upgrade-item.tier-4 .upgrade-btn { border-color: #ff0044 !important; box-shadow: inset 0 0 15px #ff004455; }
+.upgrade-item.tier-5 .upgrade-btn { border-color: #ffffff !important; box-shadow: 0 0 15px #fff3; }
+.upgrade-item.tier-7 .upgrade-btn { animation: rainbowBorder 3s linear infinite; background: rgba(255, 255, 255, 0.1); }
+
+@keyframes rainbowBorder {
+    0% { border-color: #ff0000; }
+    20% { border-color: #ffaa00; }
+    40% { border-color: #00ff00; }
+    60% { border-color: #00d4ff; }
+    80% { border-color: #ff00ff; }
+    100% { border-color: #ff0000; }
+}
